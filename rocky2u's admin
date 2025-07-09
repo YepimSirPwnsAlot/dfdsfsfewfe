@@ -2332,14 +2332,17 @@ UICorner_68.Parent = Credits
 Respawn.Name = "Respawn"
 Respawn.Parent = Main
 Respawn.BackgroundColor3 = Color3.fromRGB(119, 221, 119)
-Respawn.Position = UDim2.new(0.42, 0, 0.915, 0)
+Respawn.Position = UDim2.new(0.72, 0, 0.915730357, 0)
 Respawn.Size = UDim2.new(0, 115, 0, 35)
 Respawn.Font = Enum.Font.SourceSansBold
 Respawn.Text = "Respawn"
-Respawn.TextColor3 = Color3.fromRGB(0, 128, 0)
+Respawn.TextColor3 = Color3.fromRGB(0,128,0)
 Respawn.TextSize = 30
 Respawn.MouseButton1Down:Connect(function()
+	local Players = game:GetService("Players")
+
 	local player = game.Players.LocalPlayer
+
 	if player and player.Character then
 		player.Character:BreakJoints()
 	end
@@ -2351,42 +2354,22 @@ UICorner_69.Parent = Respawn
 Netless.Name = "Netless"
 Netless.Parent = Main
 Netless.BackgroundColor3 = Color3.fromRGB(119, 221, 119)
-Netless.Position = UDim2.new(0.89, 0, 0.915730357, 0)
-Netless.Size = UDim2.new(0, 65, 0, 35)
+Netless.Position = UDim2.new(0.63, 0, 0.915730357, 0)
+Netless.Size = UDim2.new(0, 50, 0, 36)
 Netless.Font = Enum.Font.SourceSansBold
 Netless.Text = "R6"
-Netless.TextColor3 = Color3.fromRGB(0, 128, 0)
+Netless.TextColor3 = Color3.fromRGB(0,128,0)
 Netless.TextScaled = true
+Netless.TextSize = 14.000
 Netless.TextWrapped = true
-Netless.MouseButton1Down:Connect(function()
-	wait(0.3)
-	game.Players.PlayerAdded:Connect(function(player) 
-		player.CharacterAdded:Connect(function(char) 
-			if char:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15 then 
-				local desc = game.Players:GetHumanoidDescriptionFromUserId(player.CharacterAppearanceId) 
-				local newAvatar = game.Players:CreateHumanoidModelFromDescription(desc, Enum.HumanoidRigType.R6) 
-				newAvatar:SetPrimaryPartCFrame(char.PrimaryPart.CFrame) 
-				for _, j in pairs(char:GetChildren()) do
-					if j.ClassName == "Tool" or (j:IsA("LuaSourceContainer") and j.Name ~= "Animate") then
-						j.Parent = newAvatar
-					end
-				end
-				newAvatar.Name = player.Name 
-				player.Character = newAvatar 
-				newAvatar.Parent = workspace 
-			end 
-		end) 
-	end)
-end)
 
-UICorner_70.CornerRadius = UDim.new(1, 0)
 UICorner_70.Parent = Netless
 
 AntiFling.Name = "AntiFling"
 AntiFling.Parent = Main
 AntiFling.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 AntiFling.Position = UDim2.new(0.0245891828, 0, 0.915730357, 0)
-AntiFling.Size = UDim2.new(0, 200, 0, 35)
+AntiFling.Size = UDim2.new(0, 295, 0, 35)
 AntiFling.Font = Enum.Font.SourceSans
 AntiFling.Text = game.Players.LocalPlayer.Name
 AntiFling.TextColor3 = Color3.fromRGB(0, 0, 0)
@@ -2521,6 +2504,7 @@ local function MakeDraggable()
 			end)
 		end
 	end)
+
 	UIS.InputChanged:Connect(function(input)
 		if (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) and dragToggle then
 			updateInput(input)
