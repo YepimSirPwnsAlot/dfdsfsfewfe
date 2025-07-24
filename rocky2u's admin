@@ -225,7 +225,7 @@ UpdatedFrame.Name = "Updated Frame"
 UpdatedFrame.Parent = ScrollingFrame
 UpdatedFrame.BackgroundColor3 = Color3.fromRGB(186, 142, 35)
 UpdatedFrame.Position = UDim2.new(0.0093457941, 0, 0.0022281385, 0)
-UpdatedFrame.Size = UDim2.new(0, 419, 0, 108)
+UpdatedFrame.Size = UDim2.new(0, 428, 2, 333)
 UpdatedFrame.BorderSizePixel = 0
 UpdatedFrame.Visible = false
 
