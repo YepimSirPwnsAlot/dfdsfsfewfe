@@ -220,15 +220,6 @@ local UICorner = Instance.new("UICorner")
 UICorner.Parent = ScrollingFrame
 UICorner.CornerRadius = UDim.new(0, 9)
 
-local UpdatedFrame = Instance.new("Frame")
-UpdatedFrame.Name = "Updated Frame"
-UpdatedFrame.Parent = ScrollingFrame
-UpdatedFrame.BackgroundColor3 = Color3.fromRGB(186, 142, 35)
-UpdatedFrame.Position = UDim2.new(0.0093457941, 0, 0.0022281385, 0)
-UpdatedFrame.Size = UDim2.new(0, 428, 2, 333)
-UpdatedFrame.BorderSizePixel = 0
-UpdatedFrame.Visible = false
-
 Updated.Name = "Updated"
 Updated.Parent = ScrollingFrame
 Updated.BackgroundColor3 = Color3.fromRGB(235, 190, 77)
@@ -240,9 +231,6 @@ Updated.TextColor3 = Color3.fromRGB(255, 255, 255)
 Updated.TextSize = 20.000
 Updated.TextWrapped = true
 Updated.TextXAlignment = Enum.TextXAlignment.Left
-Updated.MouseButton1Down:Connect(function()
-	UpdatedFrame.Visible = not UpdatedFrame.Visible
-end)
 
 UICorner_3.Parent = Updated
 
@@ -259,7 +247,7 @@ newTag.TextSize = 18
 newTag.BorderSizePixel = 0
 
 Cleetus.Name = "Cleetus"
-Cleetus.Parent = UpdatedFrame
+Cleetus.Parent = ScrollingFrame
 Cleetus.BackgroundColor3 = Color3.fromRGB(235, 190, 77)
 Cleetus.Position = UDim2.new(0.0093457941, 0, 0.0175743196, 0)
 Cleetus.Size = UDim2.new(0, 419, 0, 36)
@@ -288,7 +276,7 @@ newTag.TextSize = 18
 newTag.BorderSizePixel = 0
 
 JohnDoe.Name = "JohnDoe"
-JohnDoe.Parent = UpdatedFrame
+JohnDoe.Parent = ScrollingFrame
 JohnDoe.BackgroundColor3 = Color3.fromRGB(235, 190, 77)
 JohnDoe.Position = UDim2.new(0.0093457941, 0, 0.0329205021, 0)
 JohnDoe.Size = UDim2.new(0, 419, 0, 36)
@@ -874,7 +862,7 @@ newTag.TextSize = 18
 newTag.BorderSizePixel = 0
 
 TheDankEngine.Name = "TheDankEngine"
-TheDankEngine.Parent = UpdatedFrame
+TheDankEngine.Parent = ScrollingFrame
 TheDankEngine.BackgroundColor3 = Color3.fromRGB(235, 190, 77)
 TheDankEngine.Position = UDim2.new(0.0093457941, 0, 0.0482666828, 0)
 TheDankEngine.Size = UDim2.new(0, 419, 0, 36)
@@ -992,7 +980,7 @@ newTag.TextSize = 18
 newTag.BorderSizePixel = 0
 
 Banisher.Name = "Banisher"
-Banisher.Parent = UpdatedFrame
+Banisher.Parent = ScrollingFrame
 Banisher.BackgroundColor3 = Color3.fromRGB(235, 190, 77)
 Banisher.Position = UDim2.new(0.0093457941, 0, 0.077888377, 0)
 Banisher.Size = UDim2.new(0, 419, 0, 36)
@@ -1021,7 +1009,7 @@ newTag.TextSize = 18
 newTag.BorderSizePixel = 0
 
 Illuminati.Name = "Illuminati"
-Illuminati.Parent = UpdatedFrame
+Illuminati.Parent = ScrollingFrame
 Illuminati.BackgroundColor3 = Color3.fromRGB(235, 190, 77)
 Illuminati.Position = UDim2.new(0.0093457941, 0, 0.0932345614, 0)
 Illuminati.Size = UDim2.new(0, 419, 0, 36)
@@ -1031,6 +1019,9 @@ Illuminati.TextColor3 = Color3.fromRGB(255, 255, 255)
 Illuminati.TextSize = 20.000
 Illuminati.TextWrapped = true
 Illuminati.TextXAlignment = Enum.TextXAlignment.Left
+Illuminati.MouseButton1Down:Connect(function()
+	loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-sdfvgbvdefrgbfd-46100"))()
+end)
 
 UICorner_8.Parent = Illuminati
 
@@ -1047,7 +1038,7 @@ newTag.TextSize = 18
 newTag.BorderSizePixel = 0
 
 MineCraftSteve.Name = "MineCraftSteve"
-MineCraftSteve.Parent = UpdatedFrame
+MineCraftSteve.Parent = ScrollingFrame
 MineCraftSteve.BackgroundColor3 = Color3.fromRGB(235, 190, 77)
 MineCraftSteve.Position = UDim2.new(0.0093457941, 0, 0.108580746, 0)
 MineCraftSteve.Size = UDim2.new(0, 419, 0, 36)
@@ -1073,7 +1064,7 @@ newTag.TextSize = 18
 newTag.BorderSizePixel = 0
 
 Goner.Name = "Goner"
-Goner.Parent = UpdatedFrame
+Goner.Parent = ScrollingFrame
 Goner.BackgroundColor3 = Color3.fromRGB(235, 190, 77)
 Goner.Position = UDim2.new(0.0093457941, 0, 0.0625422001, 0)
 Goner.Size = UDim2.new(0, 419, 0, 36)
@@ -2738,6 +2729,18 @@ DistractDance.TextXAlignment = Enum.TextXAlignment.Left
 
 UICorner_42.Parent = DistractDance
 
+local newTag = Instance.new("TextLabel")
+newTag.Name = "NewTag"
+newTag.Parent = DistractDance
+newTag.BackgroundColor3 = Color3.fromRGB(93, 93, 93)
+newTag.Position = UDim2.new(0.85, -10, 0.1, 0)
+newTag.Size = UDim2.new(0, 55, 0, 29)
+newTag.Text = "Misc"
+newTag.TextColor3 = Color3.fromRGB(255, 255, 255)
+newTag.Font = Enum.Font.SourceSansBold
+newTag.TextSize = 20
+newTag.BorderSizePixel = 0
+
 Misc.Name = "Misc"
 Misc.Parent = ScrollingFrame
 Misc.BackgroundColor3 = Color3.fromRGB(162, 162, 162)
@@ -2751,6 +2754,18 @@ Misc.TextWrapped = true
 Misc.TextXAlignment = Enum.TextXAlignment.Left
 
 UICorner_43.Parent = Misc
+
+local newTag = Instance.new("TextLabel")
+newTag.Name = "NewTag"
+newTag.Parent = Misc
+newTag.BackgroundColor3 = Color3.fromRGB(93, 93, 93)
+newTag.Position = UDim2.new(0.85, -10, 0.1, 0)
+newTag.Size = UDim2.new(0, 55, 0, 29)
+newTag.Text = "Misc"
+newTag.TextColor3 = Color3.fromRGB(255, 255, 255)
+newTag.Font = Enum.Font.SourceSansBold
+newTag.TextSize = 20
+newTag.BorderSizePixel = 0
 
 Zeroith.Name = "Zeroith"
 Zeroith.Parent = ScrollingFrame
@@ -2792,6 +2807,18 @@ OrangeJustice.TextXAlignment = Enum.TextXAlignment.Left
 
 UICorner_45.Parent = OrangeJustice
 
+local newTag = Instance.new("TextLabel")
+newTag.Name = "NewTag"
+newTag.Parent = OrangeJustice
+newTag.BackgroundColor3 = Color3.fromRGB(93, 93, 93)
+newTag.Position = UDim2.new(0.85, -10, 0.1, 0)
+newTag.Size = UDim2.new(0, 55, 0, 29)
+newTag.Text = "Misc"
+newTag.TextColor3 = Color3.fromRGB(255, 255, 255)
+newTag.Font = Enum.Font.SourceSansBold
+newTag.TextSize = 20
+newTag.BorderSizePixel = 0
+
 InsanityPowers.Name = "InsanityPowers"
 InsanityPowers.Parent = ScrollingFrame
 InsanityPowers.BackgroundColor3 = Color3.fromRGB(162, 162, 162)
@@ -2806,6 +2833,18 @@ InsanityPowers.TextXAlignment = Enum.TextXAlignment.Left
 
 UICorner_46.Parent = InsanityPowers
 
+local newTag = Instance.new("TextLabel")
+newTag.Name = "NewTag"
+newTag.Parent = InsanityPowers
+newTag.BackgroundColor3 = Color3.fromRGB(93, 93, 93)
+newTag.Position = UDim2.new(0.85, -10, 0.1, 0)
+newTag.Size = UDim2.new(0, 55, 0, 29)
+newTag.Text = "Misc"
+newTag.TextColor3 = Color3.fromRGB(255, 255, 255)
+newTag.Font = Enum.Font.SourceSansBold
+newTag.TextSize = 20
+newTag.BorderSizePixel = 0
+
 Floss.Name = "Floss"
 Floss.Parent = ScrollingFrame
 Floss.BackgroundColor3 = Color3.fromRGB(162, 162, 162)
@@ -2819,6 +2858,18 @@ Floss.TextWrapped = true
 Floss.TextXAlignment = Enum.TextXAlignment.Left
 
 UICorner_47.Parent = Floss
+
+local newTag = Instance.new("TextLabel")
+newTag.Name = "NewTag"
+newTag.Parent = Floss
+newTag.BackgroundColor3 = Color3.fromRGB(93, 93, 93)
+newTag.Position = UDim2.new(0.85, -10, 0.1, 0)
+newTag.Size = UDim2.new(0, 55, 0, 29)
+newTag.Text = "Misc"
+newTag.TextColor3 = Color3.fromRGB(255, 255, 255)
+newTag.Font = Enum.Font.SourceSansBold
+newTag.TextSize = 20
+newTag.BorderSizePixel = 0
 
 Rokudayne.Name = "Rokudayne"
 Rokudayne.Parent = ScrollingFrame
@@ -3547,21 +3598,3 @@ local function MakeDraggable()
 end
 
 MakeDraggable()
-
-Main:TweenPosition(UDim2.new(0.382, 0, 0.181, 0), "Out", "Quad", 0.5, true)
-
-game:GetService("StarterGui"):SetCore("SendNotification",{
-Title = "Script credits",
-Text = "Credits to SirPwnsAlot who made this", 
-
-Button1 = "Ok",
-Duration = 30 
-})
-
-game:GetService("StarterGui"):SetCore("SendNotification",{
-Title = "THANK YOU",
-Text = "THANK YOU MASTERSMZ WHO USED THE EARLY VERSION! :D", 
-
-Button1 = "Thanks",
-Duration = 30 
-})
