@@ -1,1 +1,94 @@
-fdfrefegergfefe
+local TextChatService = game:GetService("TextChatService")
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local LocalPlayer = Players.LocalPlayer
+
+local ChatThingyScreenGui = Instance.new("ScreenGui")
+ChatThingyScreenGui.ResetOnSpawn = false
+ChatThingyScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+ChatThingyScreenGui.Name = "CustomChatGui"
+
+local ChatThingyFrame = Instance.new("Frame")
+ChatThingyFrame.Parent = ChatThingyScreenGui
+ChatThingyFrame.Position = UDim2.new(0.5, -250, 0.5, -200)
+ChatThingyFrame.Size = UDim2.new(0, 480, 0, 480)
+ChatThingyFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+ChatThingyFrame.BackgroundTransparency = 0.2
+ChatThingyFrame.Active = true
+
+local ChatThingyUICorner = Instance.new("UICorner")
+ChatThingyUICorner.Parent = ChatThingyFrame
+ChatThingyUICorner.CornerRadius = UDim.new(0, 10)
+
+local ScrollingFrame = Instance.new("ScrollingFrame")
+ScrollingFrame.Name = "MessageLog"
+ScrollingFrame.Parent = ChatThingyFrame
+ScrollingFrame.Size = UDim2.new(1, -20, 1, -40)
+ScrollingFrame.Position = UDim2.new(0, 10, 0, 30)
+ScrollingFrame.BackgroundTransparency = 1
+ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+ScrollingFrame.ScrollBarThickness = 6
+ScrollingFrame.SelectionGroup = false
+
+local UIListLayout = Instance.new("UIListLayout")
+UIListLayout.Parent = ScrollingFrame
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+UIListLayout.Padding = (UDim.new(0, 5))
+
+UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, UIListLayout.AbsoluteContentSize.Y)
+    ScrollingFrame.CanvasPosition = Vector2.new(0, UIListLayout.AbsoluteContentSize.Y)
+end)
+
+local dragging, dragInput, dragStart, startPos
+
+local function update(input)
+    local delta = input.Position - dragStart
+    ChatThingyFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+ChatThingyFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = ChatThingyFrame.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+ChatThingyFrame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        update(input)
+    end
+end)
+
+local function addChatMessage(sender, message)
+    local MessageLabel = Instance.new("TextLabel")
+    MessageLabel.Parent = ScrollingFrame
+    MessageLabel.Size = UDim2.new(1, 0, 0, 25)
+    MessageLabel.BackgroundTransparency = 1
+    MessageLabel.TextColor3 = Color3.new(1, 1, 1)
+    MessageLabel.TextXAlignment = Enum.TextXAlignment.Left
+    MessageLabel.Font = Enum.Font.SourceSansBold
+    MessageLabel.TextSize = 18
+    MessageLabel.Text = "[" .. sender .. "]: " .. message
+end
+
+TextChatService.MessageReceived:Connect(function(textChatMessage)
+    local sender = "System"
+    if textChatMessage.TextSource then
+        sender = textChatMessage.TextSource.Name
+    end
+    addChatMessage(sender, textChatMessage.Text)
+end)
