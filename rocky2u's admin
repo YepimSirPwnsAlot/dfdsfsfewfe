@@ -1,94 +1,657 @@
-local TextChatService = game:GetService("TextChatService")
+-- Welcome to Echolite Hub "The Game Destroyer" well its more of a game troller tbh, but ig u can demolish games with it idk but anyway enjoy the new version :D.
+
+--[[
+  _____     _           _ _ _                
+ | ____|___| |__   ___ | (_) |_ ___          
+ |  _| / __| '_ \ / _ \| | | __/ _ \         
+ | |__| (__| | | | (_) | | | ||  __/         
+ |_____\___|_| |_|\___/|_|_|\__\___|
+                                             
+--]]
+
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
-local LocalPlayer = Players.LocalPlayer
 
-local ChatThingyScreenGui = Instance.new("ScreenGui")
-ChatThingyScreenGui.ResetOnSpawn = false
-ChatThingyScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
-ChatThingyScreenGui.Name = "CustomChatGui"
+--// Configuration \\--
+local bannedPlayers = {"7susofkingthe", "cocogocaps43"}
+local player = Players.LocalPlayer
 
-local ChatThingyFrame = Instance.new("Frame")
-ChatThingyFrame.Parent = ChatThingyScreenGui
-ChatThingyFrame.Position = UDim2.new(0.5, -250, 0.5, -200)
-ChatThingyFrame.Size = UDim2.new(0, 480, 0, 480)
-ChatThingyFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-ChatThingyFrame.BackgroundTransparency = 0.2
-ChatThingyFrame.Active = true
+--// UI Setup \\--
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "EcholiteHub"
+screenGui.ResetOnSpawn = true
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-local ChatThingyUICorner = Instance.new("UICorner")
-ChatThingyUICorner.Parent = ChatThingyFrame
-ChatThingyUICorner.CornerRadius = UDim.new(0, 10)
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 520, 0, 400)
+mainFrame.Position = UDim2.new(0.5, -250, 0.5, -200)
+mainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+mainFrame.BorderSizePixel = 0
+mainFrame.Active = true
+mainFrame.Draggable = true
+mainFrame.Visible = true
+mainFrame.Parent = screenGui
 
-local ScrollingFrame = Instance.new("ScrollingFrame")
-ScrollingFrame.Name = "MessageLog"
-ScrollingFrame.Parent = ChatThingyFrame
-ScrollingFrame.Size = UDim2.new(1, -20, 1, -40)
-ScrollingFrame.Position = UDim2.new(0, 10, 0, 30)
-ScrollingFrame.BackgroundTransparency = 1
-ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
-ScrollingFrame.ScrollBarThickness = 6
-ScrollingFrame.SelectionGroup = false
+--// Ban Logic \\--
+local function checkPlayer(targetPlayer)
+    local isBanned = false
 
-local UIListLayout = Instance.new("UIListLayout")
-UIListLayout.Parent = ScrollingFrame
-UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-UIListLayout.Padding = (UDim.new(0, 5))
+    for _, name in ipairs(bannedPlayers) do
+        if name == targetPlayer.Name then
+            isBanned = true 
+            break 
+        end
+    end
 
-UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-    ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, UIListLayout.AbsoluteContentSize.Y)
-    ScrollingFrame.CanvasPosition = Vector2.new(0, UIListLayout.AbsoluteContentSize.Y)
-end)
-
-local dragging, dragInput, dragStart, startPos
-
-local function update(input)
-    local delta = input.Position - dragStart
-    ChatThingyFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    if isBanned then
+        -- Hide the UI immediately if the local player is the banned one
+        if targetPlayer == player then
+            mainFrame.Visible = false
+            screenGui:Destroy()
+        end
+        targetPlayer:Kick("Banned From Using Echolite? Cry Then.") 
+    end
 end
 
-ChatThingyFrame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+--// Execution \\--
+-- Run check for players already in the server
+for _, p in ipairs(Players:GetPlayers()) do
+    checkPlayer(p)
+end
+
+Players.PlayerAdded:Connect(checkPlayer)
+
+local mainCorner = Instance.new("UICorner")
+mainCorner.CornerRadius = UDim.new(0, 15)
+mainCorner.Parent = mainFrame
+
+local mainStroke = Instance.new("UIStroke")
+mainStroke.Color = Color3.fromRGB(0, 255, 255)
+mainStroke.Thickness = 3
+mainStroke.Parent = mainFrame
+
+local topBar = Instance.new("Frame")
+topBar.Name = "TopBar"
+topBar.Size = UDim2.new(1, 0, 0, 45)
+topBar.BackgroundTransparency = 1
+topBar.ZIndex = 20
+topBar.Parent = mainFrame
+
+local title = Instance.new("TextLabel")
+title.Text = "  Echolite Hub | Happy New Year's | Version 2.0.0"
+title.Size = UDim2.new(0.6, 0, 1, 0)
+title.BackgroundTransparency = 1
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.Font = Enum.Font.GothamBold
+title.TextSize = 14
+title.ZIndex = 21
+title.Parent = topBar
+
+local topDivider = Instance.new("Frame")
+topDivider.Name = "TopDivider"
+topDivider.Size = UDim2.new(1, 0, 0, 2)
+topDivider.Position = UDim2.new(0, 0, 1, 0)
+topDivider.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
+topDivider.BorderSizePixel = 0
+topDivider.ZIndex = 25 
+topDivider.Parent = topBar
+
+local btnContainer = Instance.new("Frame")
+btnContainer.Name = "ButtonControl"
+btnContainer.Size = UDim2.new(0, 80, 0, 28)
+btnContainer.Position = UDim2.new(1, -90, 0, 8)
+btnContainer.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+btnContainer.ZIndex = 21
+btnContainer.Parent = topBar
+
+local btnCorner = Instance.new("UICorner")
+btnCorner.CornerRadius = UDim.new(0, 6)
+btnCorner.Parent = btnContainer
+
+local btnStroke = Instance.new("UIStroke")
+btnStroke.Color = Color3.fromRGB(0, 255, 255)
+btnStroke.Thickness = 2
+btnStroke.Parent = btnContainer
+
+local btnDivider = Instance.new("Frame")
+btnDivider.Name = "VerticalDivider"
+btnDivider.Size = UDim2.new(0, 2, 1, 0)
+btnDivider.Position = UDim2.new(0.5, -1, 0, 0)
+btnDivider.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
+btnDivider.BorderSizePixel = 0
+btnDivider.ZIndex = 22
+btnDivider.Parent = btnContainer
+
+local minBtn = Instance.new("TextButton")
+minBtn.Name = "Minimize"
+minBtn.Size = UDim2.new(0.5, 0, 1, 0)
+minBtn.BackgroundTransparency = 1
+minBtn.Text = "-"
+minBtn.TextColor3 = Color3.fromRGB(0, 255, 255)
+minBtn.TextSize = 20
+minBtn.Font = Enum.Font.GothamBold
+minBtn.ZIndex = 23
+minBtn.Parent = btnContainer
+
+local closeBtn = Instance.new("TextButton")
+closeBtn.Name = "Close"
+closeBtn.Size = UDim2.new(0.5, 0, 1, 0)
+closeBtn.Position = UDim2.new(0.5, 0, 0, 0)
+closeBtn.BackgroundTransparency = 1
+closeBtn.Text = "x"
+closeBtn.TextColor3 = Color3.fromRGB(255, 0, 0)
+closeBtn.TextSize = 20
+closeBtn.Font = Enum.Font.GothamBold
+closeBtn.ZIndex = 23
+closeBtn.Parent = btnContainer
+
+local mainVerticalDivider = Instance.new("Frame")
+mainVerticalDivider.Name = "MainVerticalDivider"
+mainVerticalDivider.Size = UDim2.new(0, 2, 1, -47)
+mainVerticalDivider.Position = UDim2.new(0, 130, 0, 47)
+mainVerticalDivider.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
+mainVerticalDivider.BorderSizePixel = 0
+mainVerticalDivider.ZIndex = 10 
+mainVerticalDivider.Parent = mainFrame
+
+local sidebar = Instance.new("ScrollingFrame")
+sidebar.Name = "Sidebar"
+sidebar.Size = UDim2.new(0, 130, 1, -55)
+sidebar.Position = UDim2.new(0, 0, 0, 47)
+sidebar.BackgroundTransparency = 1
+sidebar.ScrollBarThickness = 2
+sidebar.ScrollBarImageColor3 = Color3.fromRGB(0, 255, 255)
+sidebar.AutomaticCanvasSize = Enum.AutomaticSize.Y
+sidebar.ZIndex = 2
+sidebar.BorderSizePixel = 0
+sidebar.ClipsDescendants = true
+sidebar.Parent = mainFrame
+
+local sidebar = Instance.new("ScrollingFrame")
+sidebar.Name = "Sidebar"
+sidebar.Size = UDim2.new(0, 130, 1, -55) 
+sidebar.Position = UDim2.new(0, 0, 0, 47)
+sidebar.BackgroundTransparency = 1
+sidebar.ScrollBarThickness = 2
+sidebar.ScrollBarImageColor3 = Color3.fromRGB(0, 255, 255)
+sidebar.AutomaticCanvasSize = Enum.AutomaticSize.Y
+sidebar.ZIndex = 2
+sidebar.BorderSizePixel = 0
+sidebar.ClipsDescendants = true
+sidebar.Parent = mainFrame
+
+local profileFrame = Instance.new("Frame")
+profileFrame.Name = "UserProfile"
+profileFrame.Size = UDim2.new(0, 130, 0, 50)
+profileFrame.Position = UDim2.new(0, 0, 1, -50)
+profileFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+profileFrame.BorderSizePixel = 0
+profileFrame.ZIndex = 15
+profileFrame.Visible = true
+profileFrame.Parent = mainFrame
+
+local profileCorner = Instance.new("UICorner")
+profileCorner.CornerRadius = UDim.new(0, 15)
+profileCorner.Parent = profileFrame
+
+local profileLine = Instance.new("Frame")
+profileLine.Size = UDim2.new(1, 0, 0, 2)
+profileLine.Position = UDim2.new(0, 0, 0, 0)
+profileLine.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
+profileLine.BorderSizePixel = 0
+profileLine.Visible = true
+profileLine.ZIndex = 16
+profileLine.Parent = profileFrame
+
+local pfpImg = Instance.new("ImageLabel")
+pfpImg.Name = "UserPFP"
+pfpImg.Size = UDim2.new(0, 32, 0, 32)
+pfpImg.Position = UDim2.new(0, 10, 0.5, 0)
+pfpImg.AnchorPoint = Vector2.new(0, 0.5)
+pfpImg.BackgroundTransparency = 1
+pfpImg.Image = Players:GetUserThumbnailAsync(player.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size100x100)
+pfpImg.ZIndex = 17
+pfpImg.Visible = true
+pfpImg.Parent = profileFrame
+
+local stroke = Instance.new("UIStroke")
+stroke.Color = Color3.fromRGB(0, 255, 255)
+stroke.Thickness = 2
+stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+stroke.Parent = pfpImg
+
+local pfpCorner = Instance.new("UICorner")
+pfpCorner.CornerRadius = UDim.new(1, 0)
+pfpCorner.Parent = pfpImg
+
+local userName = Instance.new("TextLabel")
+userName.Name = "UserName"
+userName.Size = UDim2.new(1, -52, 1, 0)
+userName.Position = UDim2.new(0, 48, 0, 0)
+userName.BackgroundTransparency = 1
+userName.Text = player.Name
+userName.TextWrapped = true
+userName.TextColor3 = Color3.fromRGB(255, 255, 255)
+userName.TextSize = 12
+userName.Font = Enum.Font.GothamBold
+userName.TextXAlignment = Enum.TextXAlignment.Left
+userName.ClipsDescendants = true
+userName.ZIndex = 17
+userName.Parent = profileFrame
+
+local listLayout = Instance.new("UIListLayout")
+listLayout.Padding = UDim.new(0, 0)
+listLayout.SortOrder = Enum.SortOrder.LayoutOrder
+listLayout.Parent = sidebar
+
+local pagesContainer = Instance.new("Frame")
+pagesContainer.Name = "Pages"
+pagesContainer.Size = UDim2.new(1, -135, 1, -55)
+pagesContainer.Position = UDim2.new(0, 135, 0, 50)
+pagesContainer.BackgroundTransparency = 1
+pagesContainer.ClipsDescendants = true
+pagesContainer.Parent = mainFrame
+
+local allPages = {} 
+local allTabs = {}
+local currentSelectedTab = nil
+
+local function addTab(name, order, isLast)
+    local container = Instance.new("Frame")
+    container.Name = name .. "_TabContainer"
+    container.Size = UDim2.new(1, 0, 0, 40)
+    container.BackgroundTransparency = 1
+    container.LayoutOrder = order
+    container.Parent = sidebar
+
+    local tab = Instance.new("TextButton")
+    tab.Size = UDim2.new(1, 0, 1, 0)
+    tab.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    tab.TextColor3 = Color3.fromRGB(0, 255, 255)
+    tab.Text = "  " .. name 
+    tab.TextXAlignment = Enum.TextXAlignment.Left
+    tab.Font = Enum.Font.GothamMedium
+    tab.TextSize = 13
+    tab.BorderSizePixel = 0
+    tab.ZIndex = 3
+    tab.Parent = container
+    
+    if not isLast then
+        local div = Instance.new("Frame")
+        div.Name = "TabDivider"
+        div.Size = UDim2.new(1, 0, 0, 1)
+        div.Position = UDim2.new(0, 0, 1, -1)
+        div.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
+        div.BorderSizePixel = 0
+        div.ZIndex = 5
+        div.Parent = container
+    end
+
+    local page = Instance.new("ScrollingFrame")
+    page.Name = name .. "_Page"
+    page.Size = UDim2.new(1, 0, 1, 0)
+    page.BackgroundTransparency = 1
+    page.Visible = false
+    page.ScrollBarThickness = 2
+    page.ScrollBarImageColor3 = Color3.fromRGB(0, 255, 255)
+    page.Parent = pagesContainer
+    
+    allPages[name] = page
+    allTabs[name] = tab
+
+    tab.MouseButton1Down:Connect(function()
+        for tabName, p in pairs(allPages) do
+            p.Visible = false
+            allTabs[tabName].TextColor3 = Color3.fromRGB(0, 255, 255)
+        end
+        page.Visible = true
+        tab.TextColor3 = Color3.fromRGB(255, 255, 255)
+        currentSelectedTab = name
+    end)
+
+    tab.MouseEnter:Connect(function()
+        if currentSelectedTab ~= name then tab.TextColor3 = Color3.fromRGB(0, 255, 255) end
+    end)
+    
+    tab.MouseLeave:Connect(function()
+        if currentSelectedTab ~= name then tab.TextColor3 = Color3.fromRGB(0, 255, 255) end
+    end)
+    
+    return page
+end
+
+local tabList = {"Information", "Credits", "Updates", "Player", "Fe/Admin Gui's", "Scripts", "Chat", "Trolling", "DM's", "Settings", "Complaints"}
+
+for i, name in ipairs(tabList) do
+    local isLast = (i == #tabList)
+    local newPage = addTab(name, i, isLast)
+    if i == 1 then 
+        newPage.Visible = true 
+        allTabs[name].TextColor3 = Color3.fromRGB(0, 255, 255)
+        currentSelectedTab = name
+    end
+end
+
+local dragging, dragStart, startPos
+topBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
         dragging = true
         dragStart = input.Position
-        startPos = ChatThingyFrame.Position
-
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragging = false
-            end
-        end)
-    end
-end)
-
-ChatThingyFrame.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-        dragInput = input
+        startPos = mainFrame.Position
     end
 end)
 
 UserInputService.InputChanged:Connect(function(input)
-    if input == dragInput and dragging then
-        update(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - dragStart
+        mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
     end
 end)
 
-local function addChatMessage(sender, message)
-    local MessageLabel = Instance.new("TextLabel")
-    MessageLabel.Parent = ScrollingFrame
-    MessageLabel.Size = UDim2.new(1, 0, 0, 25)
-    MessageLabel.BackgroundTransparency = 1
-    MessageLabel.TextColor3 = Color3.new(1, 1, 1)
-    MessageLabel.TextXAlignment = Enum.TextXAlignment.Left
-    MessageLabel.Font = Enum.Font.SourceSansBold
-    MessageLabel.TextSize = 18
-    MessageLabel.Text = "[" .. sender .. "]: " .. message
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end
+end)
+
+local minimized = false
+minBtn.MouseButton1Down:Connect(function()
+    if not minimized then
+        topDivider.Visible = false
+        pfpImg.Visible = false
+        profileLine.Visible = false
+        profileFrame.Visible = false
+        
+        mainFrame:TweenSize(UDim2.new(0, 500, 0, 47), "Out", "Quad", 0.3, true)
+        minBtn.Text = "+"
+    else
+        mainFrame:TweenSize(UDim2.new(0, 500, 0, 400), "Out", "Quad", 0.3, true)
+        minBtn.Text = "-"
+        
+        task.delay(0.2, function()
+            topDivider.Visible = true
+            pfpImg.Visible = true
+            profileLine.Visible = true
+            profileFrame.Visible = true
+        end)
+    end
+    
+    minimized = not minimized
+end)
+
+closeBtn.MouseButton1Click:Connect(function()
+    local TweenService = game:GetService("TweenService")
+    local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+    
+    local shrinkTween = TweenService:Create(mainFrame, tweenInfo, {
+        Size = UDim2.new(0, 0, 0, 0),
+        BackgroundTransparency = 1
+    })
+    
+    mainStroke.Enabled = false
+    
+    shrinkTween:Play()
+    
+    shrinkTween.Completed:Connect(function()
+        screenGui:Destroy()
+    end)
+end)
+
+local InformationPage = allPages["Information"]
+
+if not InformationPage:FindFirstChildOfClass("UIListLayout") then
+    local layout = Instance.new("UIListLayout")
+    layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    layout.Padding = UDim.new(0, 8)
+    layout.SortOrder = Enum.SortOrder.LayoutOrder
+    layout.Parent = InformationPage
+    
+    local padding = Instance.new("UIPadding")
+    padding.PaddingTop = UDim.new(0, 10)
+    padding.Parent = InformationPage
 end
 
-TextChatService.MessageReceived:Connect(function(textChatMessage)
-    local sender = "System"
-    if textChatMessage.TextSource then
-        sender = textChatMessage.TextSource.Name
+local Welcome = Instance.new("TextLabel")
+Welcome.Name = "Welcome"
+Welcome.Size = UDim2.new(0.95, 0, 0, 38)
+Welcome.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Welcome.TextColor3 = Color3.fromRGB(0, 255, 255)
+Welcome.Text = "  Welcome to Echolite Hub The Condo Destroyer!"
+Welcome.TextXAlignment = Enum.TextXAlignment.Left
+Welcome.Font = Enum.Font.GothamBold
+Welcome.TextSize = 14
+Welcome.Parent = InformationPage
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 6)
+corner.Parent = Welcome
+
+local stroke = Instance.new("UIStroke")
+stroke.Color = Color3.fromRGB(0, 255, 255)
+stroke.Thickness = 2
+stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+stroke.Parent = Welcome
+
+local UpdateVersion = Instance.new("TextLabel")
+UpdateVersion.Name = "UpdateVersion"
+UpdateVersion.Size = UDim2.new(0.95, 0, 0, 38)
+UpdateVersion.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+UpdateVersion.TextColor3 = Color3.fromRGB(0, 255, 255)
+UpdateVersion.Text = "  Echolite Version | Normal Version 2.0.0"
+UpdateVersion.TextXAlignment = Enum.TextXAlignment.Left
+UpdateVersion.Font = Enum.Font.GothamBold
+UpdateVersion.TextSize = 14
+UpdateVersion.Parent = InformationPage
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 6)
+corner.Parent = UpdateVersion
+
+local stroke = Instance.new("UIStroke")
+stroke.Color = Color3.fromRGB(0, 255, 255)
+stroke.Thickness = 2
+stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+stroke.Parent = UpdateVersion
+
+local Discord = Instance.new("TextLabel")
+Discord.Name = "Discord"
+Discord.Size = UDim2.new(0.95, 0, 0, 38)
+Discord.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Discord.TextColor3 = Color3.fromRGB(0, 255, 255)
+Discord.Text = "  Discord"
+Discord.TextXAlignment = Enum.TextXAlignment.Left
+Discord.Font = Enum.Font.GothamBold
+Discord.TextSize = 14
+Discord.Parent = InformationPage
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 6)
+corner.Parent = Discord
+
+local stroke = Instance.new("UIStroke")
+stroke.Color = Color3.fromRGB(0, 255, 255)
+stroke.Thickness = 2
+stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+stroke.Parent = Discord
+
+local DiscordLink = Instance.new("TextButton")
+DiscordLink.Name = "DiscordLink"
+DiscordLink.AnchorPoint = Vector2.new(1, 0.5)
+DiscordLink.Position = UDim2.new(1, -5, 0.5, 0)
+DiscordLink.Size = UDim2.new(0.55, 0, 0, 28)
+DiscordLink.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+DiscordLink.TextColor3 = Color3.fromRGB(0, 255, 255)
+DiscordLink.Text = "https://discord.gg/MVEB7jCm"
+DiscordLink.Font = Enum.Font.GothamBold
+DiscordLink.TextSize = 14
+DiscordLink.Parent = Discord
+
+local cornerLink = Instance.new("UICorner")
+cornerLink.CornerRadius = UDim.new(0, 6)
+cornerLink.Parent = DiscordLink
+
+local strokeLink = Instance.new("UIStroke")
+strokeLink.Color = Color3.fromRGB(0, 255, 255)
+strokeLink.Thickness = 2
+strokeLink.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+strokeLink.Parent = DiscordLink
+
+DiscordLink.MouseButton1Down:Connect(function()
+    if setclipboard then
+        setclipboard("https://discord.gg/MVEB7jCm")
     end
-    addChatMessage(sender, textChatMessage.Text)
 end)
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 6)
+corner.Parent = CE
+
+local stroke = Instance.new("UIStroke")
+stroke.Color = Color3.fromRGB(0, 255, 255)
+stroke.Thickness = 2
+stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+stroke.Parent = CE
+
+local Cred = Instance.new("TextLabel")
+Cred.Name = "Discord"
+Cred.Size = UDim2.new(0.95, 0, 0, 38)
+Cred.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Cred.TextColor3 = Color3.fromRGB(0, 255, 255)
+Cred.Text = "Made by YepImSirPwnsAlot \n\ Feel free to join our discord server!\n\ You can use this in almost any game."
+Cred.Font = Enum.Font.GothamBold
+Cred.BorderSizePixel = 0
+Cred.TextSize = 14
+Cred.Parent = InformationPage
+
+local CreditsPage = allPages["Credits"]
+
+if not CreditsPage:FindFirstChildOfClass("UIListLayout") then
+    local layout = Instance.new("UIListLayout")
+    layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    layout.Padding = UDim.new(0, 8)
+    layout.SortOrder = Enum.SortOrder.LayoutOrder
+    layout.Parent = CreditsPage
+    
+    local padding = Instance.new("UIPadding")
+    padding.PaddingTop = UDim.new(0, 10)
+    padding.Parent = CreditsPage
+end
+
+local function CreateButton(name, text)
+    local btn = Instance.new("TextButton")
+    btn.Name = name
+    btn.Parent = CreditsPage
+    btn.Size = UDim2.new(0.95, 0, 0, 38)
+    btn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    btn.TextColor3 = Color3.new(0, 255, 255)
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 14
+    btn.Text = text
+    
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 6)
+    corner.Parent = btn
+    
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = Color3.fromRGB(0, 255, 255)
+    stroke.Thickness = 2
+	stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    stroke.Parent = btn
+
+    return btn
+end
+
+local vfdvfdbfveve = Instance.new("TextLabel")
+vfdvfdbfveve.Name = "fwefwfwfwfwfeww"
+vfdvfdbfveve.Size = UDim2.new(0.95, 0, 0, 43)
+vfdvfdbfveve.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+vfdvfdbfveve.TextColor3 = Color3.fromRGB(0, 255, 255)
+vfdvfdbfveve.Text = "Thanks for all of the people using \n this script, and MASSIVE HUGE Shout out to MastersMZ \n for testing the GUI \n and thanks for using Echolite Hub V2 means a lot \n to me :)"
+vfdvfdbfveve.BorderSizePixel = 0
+vfdvfdbfveve.Font = Enum.Font.GothamBold
+vfdvfdbfveve.TextSize = 14
+vfdvfdbfveve.Parent = CreditsPage
+
+local UpdatesPage = allPages["Updates"]
+
+if not UpdatesPage:FindFirstChildOfClass("UIListLayout") then
+    local layout = Instance.new("UIListLayout")
+    layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    layout.Padding = UDim.new(0, 8)
+    layout.SortOrder = Enum.SortOrder.LayoutOrder
+    layout.Parent = UpdatesPage
+    
+    local padding = Instance.new("UIPadding")
+    padding.PaddingTop = UDim.new(0, 10)
+    padding.Parent = UpdatesPage
+end
+
+local function CreateButton(name, text)
+    local btn = Instance.new("TextButton")
+    btn.Name = name
+    btn.Parent = UpdatesPage
+    btn.Size = UDim2.new(0.95, 0, 0, 38)
+    btn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    btn.TextColor3 = Color3.new(0, 255, 255)
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 14
+    btn.Text = text
+    
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 6)
+    corner.Parent = btn
+    
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = Color3.fromRGB(0, 255, 255)
+    stroke.Thickness = 2
+	stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    stroke.Parent = btn
+
+    return btn
+end
+
+local UselessButton = CreateButton("Btn1", "  Join the Discord bro")
+UselessButton.TextXAlignment = Enum.TextXAlignment.Left
+Instance.new("UICorner", UselessButton).CornerRadius = UDim.new(0, 6)
+
+local stroke = Instance.new("UIStroke")
+stroke.Color = Color3.fromRGB(0, 255, 255)
+stroke.Thickness = 2
+stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+stroke.Parent = UselessButton
+
+local DiscordLink2 = Instance.new("TextButton")
+DiscordLink2.Name = "DiscordLink"
+DiscordLink2.AnchorPoint = Vector2.new(1, 0.5)
+DiscordLink2.Position = UDim2.new(1, -5, 0.5, 0)
+DiscordLink2.Size = UDim2.new(0.55, 0, 0, 28)
+DiscordLink2.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+DiscordLink2.TextColor3 = Color3.fromRGB(0, 255, 255)
+DiscordLink2.Text = "https://discord.gg/uj9SMQb5"
+DiscordLink2.Font = Enum.Font.GothamBold
+DiscordLink2.TextSize = 14
+DiscordLink2.Parent = UselessButton
+Instance.new("UICorner", DiscordLink2).CornerRadius = UDim.new(0, 6)
+
+local strokeLink = Instance.new("UIStroke")
+strokeLink.Color = Color3.fromRGB(0, 255, 255)
+strokeLink.Thickness = 2
+strokeLink.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+strokeLink.Parent = DiscordLink2
+
+DiscordLink.MouseButton1Down:Connect(function()
+    if setclipboard then
+        setclipboard("https://discord.gg/MVEB7jCm")
+    end
+end)
+
+local vfdvfdbfveve = Instance.new("TextLabel")
+vfdvfdbfveve.Name = "fwefwfwfwfwfeww"
+vfdvfdbfveve.Size = UDim2.new(0.95, 0, 0, 85)
+vfdvfdbfveve.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+vfdvfdbfveve.TextColor3 = Color3.fromRGB(0, 255, 255)
+vfdvfdbfveve.Text = "I fixed a few bugs, added 4 more tabs. \n And added more buttons to some pre-existing tabs. \n the part where it shows \n your display \n name now shows \n your actual username and i \n added a cyan ring around the pfp picture."
+vfdvfdbfveve.BorderSizePixel = 0
+vfdvfdbfveve.Font = Enum.Font.GothamBold
+vfdvfdbfveve.TextSize = 14
+vfdvfdbfveve.Parent = UpdatesPage
